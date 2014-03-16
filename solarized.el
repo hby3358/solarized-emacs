@@ -69,6 +69,11 @@ Also affects `linum-mode' background."
   :type 'boolean
   :group 'solarized)
 
+(defcustom solarized-emphasize-indicators t
+  "Use more colors for indicators such as git:gutter, flycheck and similar."
+  :type 'boolean
+  :group 'solarized)
+
 (defcustom solarized-high-contrast-mode-line nil
   "Make the active/inactive mode line stand out more."
   :type 'boolean
@@ -208,6 +213,15 @@ customize the resulting theme."
                           base02 base03))
          (s-fringe-fg (if solarized-distinct-fringe-background
                           base0 base01))
+
+         
+         (s-ind-red-fg (if solarized-emphasize-indicators
+                            red s-fringe-fg))
+         (s-ind-yellow-fg (if solarized-emphasize-indicators
+                            yellow s-fringe-fg))
+         (s-ind-green-fg (if solarized-emphasize-indicators
+                            green s-fringe-fg))
+         
 
          (s-header-line-fg (if solarized-high-contrast-mode-line
                                     base1 base0))
@@ -734,15 +748,26 @@ customize the resulting theme."
      `(erc-underline-face ((t (:underline t))))
 
      ;; git-gutter
-     `(git-gutter:added ((,class (:background ,green :foreground ,base03
-                                              :weight bold))))
-     `(git-gutter:deleted ((,class (:background ,red :foreground ,base03
-                                                :weight bold))))
-     `(git-gutter:modified ((,class (:background ,blue :foreground ,base03
-                                                 :weight bold))))
-     `(git-gutter:unchanged ((,class (:background ,base02
-                                                  :foreground ,base03
-                                                  :weight bold))))
+     `(git-gutter:added
+         ((,class (:weight normal
+                         :foreground ,(if solarized-emphasize-indicators green s-fringe-fg)
+                         :background ,s-fringe-bg
+                         ))))
+     `(git-gutter:deleted
+         ((,class (:weight normal
+                         :foreground ,(if solarized-emphasize-indicators red s-fringe-fg)
+                         :background ,s-fringe-bg
+                         ))))
+     `(git-gutter:modified
+       ((,class (:weight normal
+                         :foreground ,(if solarized-emphasize-indicators blue s-fringe-fg )
+                         :background ,s-fringe-bg
+                         ))))
+     `(git-gutter:unchanged
+       ((,class (:weight normal
+                         :foreground ,(if solarized-emphasize-indicators base01 s-fringe-fg)
+                         :background ,s-fringe-bg
+                         ))))
 
      ;; git-gutter-fr
      `(git-gutter-fr:added ((,class (:foreground ,green  :weight bold))))
@@ -759,7 +784,7 @@ customize the resulting theme."
      `(git-gutter+-unchanged ((,class (:background ,base02
                                                    :foreground ,base03
                                                    :weight bold))))
-     `(git-gutter-fr+-added ((,class (:foreground ,green  :weight bold))))
+     `(git-gutter-fr+-added ((,class (:foreground ,green :weight bold))))
      `(git-gutter-fr+-deleted ((,class (:foreground ,red :weight bold))))
      `(git-gutter-fr+-modified ((,class (:foreground ,blue :weight bold))))
 
